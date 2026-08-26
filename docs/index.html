@@ -1,31 +1,222 @@
 <!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chanh Có Gu</title><meta name="description" content="Chanh tuy chua nhưng gu thì không chua"><style>
-:root{color-scheme:light dark;--nen:#fff;--chu:#111;--phu:#6b6b6b;--vien:#e8e8e8}
-@media(prefers-color-scheme:dark){:root{--nen:#0f0f0f;--chu:#f2f2f2;--phu:#9a9a9a;--vien:#272727}}
+
+/* Bảng màu lấy TỪ CÁI TÊN, không phải xám trung tính.
+   Bản trước là đen-trắng thuần: sạch nhưng không phải của ai cả, mở lên không
+   nhớ được gì. Nền kem ấm + mực ngả ô-liu + vàng chanh làm nhấn — đúng ba màu
+   đã có sẵn trong "Chanh Có Gu", và cùng họ với tông ảnh thu đông. */
+:root{color-scheme:light dark;
+--nen:#FFFCF2;--nen2:#F7EFDD;--chu:#171610;--phu:#736E5C;--vien:#EDE6D4;--o:#F6F0DF;
+--nhan:#E4B520;--la:#7FA96A;--la-dam:#5C8449;--sang:#FFF3BE;--vet:#FBEBB4}
+@media(prefers-color-scheme:dark){:root{
+--nen:#100F0B;--nen2:#17150E;--chu:#F6F2E6;--phu:#8C8672;--vien:#25231A;--o:#1A1913;
+--nhan:#F0C64A;--la:#82AE6D;--la-dam:#618A4D;--sang:#FFF3BE;--vet:#241F0C}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--nen);color:var(--chu);-webkit-font-smoothing:antialiased;
+/* Nền ĐỔ DẦN, không phẳng lì. Một màu kem trải từ đầu tới cuối đọc ra là "màu
+   nền mặc định"; đổ nhẹ xuống một tông ấm hơn thì trang có chiều sâu mà vẫn
+   không ai chỉ ra được là đang có gradient. `fixed` để nền đứng yên khi cuộn —
+   nền trôi theo nội dung là thấy rõ chỗ chuyển màu. */
+body{margin:0;color:var(--chu);-webkit-font-smoothing:antialiased;
+background:var(--nen);
+background-image:linear-gradient(170deg,var(--nen) 0%,var(--nen) 32%,var(--nen2) 100%);
+background-attachment:fixed;
 font:16px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-main{max-width:34rem;margin:0 auto;padding:1.5rem 1rem 3rem}
-header{text-align:center;margin-bottom:1.4rem}
+
+/* CHỮ CÓ NÉT RIÊNG, và KHÔNG tải font ngoài.
+   Bản trước dùng font hệ thống cho mọi thứ — sạch nhưng đó đúng là font mà mọi
+   ứng dụng trên máy đang dùng, nên trang đọc lên "giống mọi trang khác": chủ
+   kênh gọi là hơi formal, không kiểu cách.
+   Chữa bằng CÁCH DÙNG chữ chứ không bằng cách tải một font lạ về: chữ có chân
+   cho tên kênh và nhãn bộ (Georgia có sẵn trên mọi máy Mac/iOS/Windows và ĐỦ
+   DẤU TIẾNG VIỆT — đã kiểm ở `collage.FONTS`), chữ nghiêng cho câu giới thiệu,
+   chữ thường không chân cho tên món. Ba tầng khác nhau là trang có giọng, mà
+   vẫn không thêm một request nào. */
+.co-chan{font-family:Georgia,'Iowan Old Style','Times New Roman',serif}
+main{max-width:34rem;margin:0 auto;padding:0 0 3.5rem}
 img{display:block}
-.ava{width:4.5rem;height:4.5rem;border-radius:999px;object-fit:cover;margin:0 auto .6rem}
-h1{font-size:1.15rem;margin:0 0 .25rem;letter-spacing:-.01em}
-header p{margin:0;color:var(--phu);font-size:.85rem}
-.xh{display:flex;gap:.5rem;justify-content:center;margin-top:.9rem}
-.xh a{font-size:.78rem;padding:.42rem .85rem;border:1px solid var(--vien);
-border-radius:999px;text-decoration:none;color:var(--chu)}
-a.the{display:block;text-decoration:none;transition:transform .12s ease}
-a.the:active{transform:scale(.985)}
-a.the img,a.the .trong{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
-a.the .trong{background:var(--vien)}
-.trong-hoan{text-align:center;color:var(--phu);font-size:.9rem}
-footer{margin-top:2.5rem;text-align:center;color:var(--phu);font-size:.72rem}
+
+/* Đầu trang là một VỆT SÁNG, không phải khoảng trống.
+   Bản trước chỉ có logo + hai dòng chữ thả giữa nền trơn, và trên màn rộng thì
+   nó thành một mảng trống mênh mông có ba thứ nhỏ xíu ở giữa — chủ kênh chỉ
+   thẳng vào đúng chỗ này. Vệt sáng vàng chanh toả từ sau logo cho khối đó một
+   ranh giới mà không cần kẻ vạch, và nối luôn logo với cái tên. */
+header{position:relative;text-align:center;padding:2.1rem 1rem 1.15rem;
+margin-bottom:1.05rem;isolation:isolate}
+
+/* ĐẦU TRANG CÓ BÌA */
+/* Chiều cao bìa phải CHỐT BẰNG SỐ, không thả cho ảnh quyết.
+   `min-height` không chặn được chiều cao: ảnh trong ô lưới có `height:100%` mà
+   ô lại cao tự động, nên nó rơi về chiều cao thật của ảnh — ảnh gốc 9:16 rộng
+   832px thì cao 1479px, tức bìa nuốt trọn màn hình và người xem phải cuộn một
+   quãng mới thấy được món nào. Đo thật, đúng loại lỗi đã cắn ở ô lưới lớn.
+   Chốt theo VH để bìa luôn chỉ chiếm một phần màn, kèm trần rem cho màn cao. */
+/* Phải là `minmax(0,1fr)`, KHÔNG phải `1fr`. Sàn của `1fr` là `auto`, tức hàng
+   vẫn không co xuống dưới chiều cao thật của ảnh — đã thử `1fr` và đo lại vẫn
+   666px y như cũ. `minmax(0,…)` mới hạ sàn về 0.
+   Không khai gì thì hàng ngầm định là `auto` và
+   nó co theo CHIỀU CAO THẬT của ảnh (375px rộng, ảnh 9:16 → 666px), trong khi
+   header chỉ cao 352px và cắt phần thừa. Khối chữ neo `align-self:end` rơi
+   xuống đáy hàng 666px — tức nằm ngoài vùng nhìn thấy, mất sạch logo, tên và
+   câu giới thiệu mà nhìn trang chỉ thấy một tấm ảnh. Đo thật. */
+header.bia{display:grid;grid-template-rows:minmax(0,1fr);padding:0;margin-bottom:.9rem;
+height:44vh;min-height:13rem;max-height:22rem;
+border-radius:0 0 1.75rem 1.75rem;overflow:hidden}
+header.bia>*{grid-area:1/1}
+header.bia .nen{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+/* Lớp phủ: tối ở đáy để chữ đọc được, và ĐÁY TAN HẲN vào màu nền trang nên
+   không thấy đường cắt giữa bìa và lưới. */
+/* Dải tối phải còn ĐẶC ở chỗ chữ đứng, rồi mới tan vào nền ở 12% cuối.
+   Bản đầu tan dần ngay từ 74% nên chữ trắng rơi đúng vùng chuyển sang màu kem —
+   đọc được nhưng mỏng, mà đây là dòng tên kênh. */
+header.bia .phu{background:
+linear-gradient(rgba(0,0,0,.30) 0%,rgba(0,0,0,0) 30%,rgba(8,6,2,.52) 60%,
+rgba(8,6,2,.80) 88%,var(--nen) 100%)}
+header.bia .tren{align-self:end;padding:1rem 1.25rem 1.6rem;z-index:1}
+header.bia .logo{width:2.9rem;height:2.9rem;margin-bottom:.35rem}
+header.bia h1{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+header.bia p{color:rgba(255,255,255,.9);text-shadow:0 1px 8px rgba(0,0,0,.5)}
+header.bia .logo{filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+header.bia::before{content:none}
+header::before{content:"";position:absolute;z-index:-1;left:50%;top:-42%;
+width:min(34rem,120%);aspect-ratio:1;transform:translateX(-50%);
+background:radial-gradient(closest-side,var(--vet),transparent 70%)}
+.logo{width:4rem;height:4rem;margin:0 auto .55rem}
+/* Tên kênh: chữ có chân, KHÔNG bó chữ âm. Bó âm là thủ pháp của chữ không chân
+   cỡ lớn; ép lên chữ có chân thì mấy chân chữ chạm nhau và đọc ra bị bẩn. */
+h1{font-size:2.05rem;font-weight:700;margin:0 0 .1rem;letter-spacing:-.01em;line-height:1.1}
+/* Câu giới thiệu: chữ NHỎ, GIÃN, không chân — cố ý tương phản hết cỡ với tên
+   kênh cỡ lớn có chân ngay trên. Bản trước để nghiêng cùng họ chữ có chân, nên
+   hai dòng trông như một khối chữ dài, không ra đầu ra đuôi.
+   To ↔ nhỏ, có chân ↔ không chân, bó ↔ giãn: ba trục ngược nhau là mắt đọc ra
+   ngay đâu là tên, đâu là lời phụ. */
+header p{margin:.15rem auto 0;max-width:22rem;color:var(--phu);
+font-size:.72rem;line-height:1.6;letter-spacing:.13em;text-transform:uppercase}
+
+
+
+/* Ô tìm KHÔNG dính. Bản trước ghim nó lên đầu màn cho "tiện", nhưng nó che mất
+   một dải ảnh suốt lúc cuộn — mà trang này chỉ có mấy chục món, cuộn ngược lên
+   đầu mất một cái vuốt. Ảnh mới là thứ đáng chiếm chỗ. */
+.tim{display:flex;align-items:center;gap:.55rem;
+margin:0 .55rem 1rem;padding:.66rem .95rem;border-radius:999px;background:var(--o);
+box-shadow:0 0 0 1px var(--vien)}
+.tim:focus-within{box-shadow:0 0 0 2px var(--nhan)}
+.tim svg{width:1.05rem;height:1.05rem;flex:none;color:var(--phu)}
+.tim input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--chu);
+font:inherit;font-size:.9rem}
+.tim input::-webkit-search-cancel-button{filter:grayscale(1);opacity:.5}
+
+/* MỖI BỘ SƯU TẬP MỘT MẢNG MÀU, xoay vòng bốn tông.
+   Giải hai chuyện cùng lúc: chia được nhóm mà không cần kẻ vạch, và cho trang
+   màu sắc — lưới ảnh chạy một mạch trên nền trơn là thứ đọc lên rất "nghiêm
+   túc", không hợp một kênh bán đồ nữ. Tông lấy quanh vàng chanh nên bốn mảng
+   vẫn cùng một họ, không thành cầu vồng. */
+.nhom{margin:0 .4rem 1.1rem;padding:.85rem .5rem .6rem;border-radius:1.4rem;
+background:var(--m)}
+/* CHỈ MỘT bộ sưu tập thì bỏ hẳn mảng màu: một khối tint phủ trọn trang không
+   phân biệt được gì với ai, chỉ làm nền đổi màu — mà đó đúng là thứ đọc ra
+   "đơn điệu". Mảng màu chỉ có nghĩa khi có cái thứ hai để so. */
+.nhom:only-of-type{background:none;padding:0;margin-bottom:0}
+.nhom:only-of-type h2{margin-left:.35rem}
+.nhom[data-m="0"]{--m:#FDF3D2}
+.nhom[data-m="1"]{--m:#E9F1E2}
+.nhom[data-m="2"]{--m:#FBE9E4}
+.nhom[data-m="3"]{--m:#E5EDF3}
+@media(prefers-color-scheme:dark){
+.nhom[data-m="0"]{--m:#1E1A0E}
+.nhom[data-m="1"]{--m:#141A12}
+.nhom[data-m="2"]{--m:#1E1512}
+.nhom[data-m="3"]{--m:#111820}}
+/* Nhãn bộ dựng như một dòng tiêu đề TẠP CHÍ: tên lớn có chân, một gạch mảnh
+   kéo hết chỗ trống, rồi số ở cuối. Bản trước là chấm tròn + tên + số, ba mẩu
+   rời rạc nằm cạnh nhau — chủ kênh nói "không mượt mà", và đúng: không có gì
+   NỐI ba mẩu đó lại. Gạch kéo ngang chính là thứ nối. */
+.nhom h2{display:flex;align-items:baseline;gap:.7rem;margin:0 .35rem .7rem;
+font-weight:400}
+.nhom h2 span{font-size:1.42rem;font-weight:700;letter-spacing:-.02em;flex:none}
+.nhom h2 i{flex:1;height:1px;background:var(--vien);transform:translateY(-.3em)}
+.nhom h2 em{flex:none;font-style:normal;font-size:.7rem;font-weight:700;
+letter-spacing:.1em;color:var(--phu)}
+
+/* `[hidden]` phải ép `display:none`. Thuộc tính `hidden` chỉ được trình duyệt
+   đặt `display:none` ở bảng mặc định, mà bảng đó THUA bất kỳ luật `display` nào
+   của trang — `a.the{display:block}` ngay dưới đây là đủ để vô hiệu hoá nó.
+   Hậu quả đo thật: lọc xong nhãn ghi "1 món" mà lưới vẫn bày đủ 5 ô.
+   Bẫy này cũng vô hiệu hoá luôn `.nhom[hidden]` và dòng "không có món nào khớp". */
+[hidden]{display:none!important}
+a.the{display:block;text-decoration:none;transition:transform .12s ease,opacity .12s ease}
+a.the:active{transform:scale(.985);opacity:.9}
+/* Khung giữ TỈ LỆ, bên trong là một DẢI ảnh nằm ngang trượt qua.
+   Bản trước chồng ảnh tuyệt đối rồi mờ chồng; nay là dải nên chỉ cần dịch
+   `transform` — trình duyệt chạy trên GPU, không phải vẽ lại từng khung. */
+a.the .khung{position:relative;display:block;width:100%;aspect-ratio:4/5;
+overflow:hidden;background:var(--o)}
+a.the .day{display:flex;height:100%;will-change:transform}
+/* `flex:1 0 0` chia đều dải cho mọi ô: bề rộng dải đã đặt sẵn theo SỐ ô ở thuộc
+   tính style, nên không cần tính phần trăm cho từng ảnh. `min-width:0` bắt buộc
+   — mặc định ô flex không co dưới bề rộng thật của ảnh, và cả dải phình ra. */
+a.the .day img{flex:1 0 0;min-width:0;height:100%;object-fit:cover}
+a.the .khung .trong{position:absolute;inset:0;background:var(--o)}
+
+/* Máy bật "giảm chuyển động" thì DỪNG HẲN vòng lật. Ảnh tự đổi là thứ gây khó
+   chịu thật với người nhạy cảm chuyển động, mà trang vẫn dùng được khi đứng yên
+   — chỉ mất mấy tấm phụ. */
+@media(prefers-reduced-motion:reduce){
+a.the .day{animation:none!important}
+}
+.rong{text-align:center;color:var(--phu);font-size:.88rem;padding:2rem 1rem}
+
 
 a.the{position:relative;color:#fff}
-a.the .mo{position:absolute;inset:auto 0 0 0;background:linear-gradient(transparent,rgba(0,0,0,.75))}
-a.the b{display:-webkit-box;font-weight:600;line-height:1.3;
--webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+a.the .mo{position:absolute;inset:auto 0 0 0;
+background:linear-gradient(transparent,rgba(20,16,4,.32) 42%,rgba(20,16,4,.84))}
+/* Nhãn giờ là MÃ ("Outfit 5"), không phải một câu — nên bày như cái TEM: viết
+   HOA, giãn chữ, nhỏ và đậm. Để nguyên cỡ chữ câu văn thì một mã ba chữ nằm
+   giữa khoảng trống lớn, đọc ra như câu bị cắt cụt. */
+a.the b{display:block;font-weight:700;line-height:1.3;font-size:.7rem;
+text-transform:uppercase;letter-spacing:.11em;
+text-shadow:0 1px 4px rgba(0,0,0,.5);white-space:nowrap;overflow:hidden;
+text-overflow:ellipsis}
 
-.luoi{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
-a.the .mo{padding:1.6rem .55rem .55rem}
-a.the b{font-size:.76rem}
-</style></head><body><main><header><h1>Chanh Có Gu</h1><p>Chanh tuy chua nhưng gu thì không chua</p></header><p class="trong-hoan">Chưa có sản phẩm nào.</p><footer>Tiếp thị liên kết</footer></main></body></html>
+
+.luoi{display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem}
+a.the{border-radius:1rem;overflow:hidden}
+a.the .mo{padding:1.7rem .7rem .6rem}
+a.the b{font-size:.7rem}
+/* NHỊP KHẢM: cứ năm ô thì một ô tràn ngang. Bản trước chỉ cho ô ĐẦU khung lớn,
+   nên từ ô thứ hai trở đi là một lưới đều tăm tắp chạy mãi — cuộn xuống một
+   quãng là hết chỗ cho mắt dừng.
+   Phải là `nth-child(5n+1)` chứ không phải `first-child`: nhịp KHÔNG được phụ
+   thuộc vào số bộ sưu tập. Kênh đang có ĐÚNG MỘT bộ, mà luật cũ thì một bộ = một
+   ô lớn duy nhất trên cả trang — đúng chỗ trang đọc ra đơn điệu. */
+.luoi a.the.to,html:not([data-js]) .luoi a.the:nth-child(5n+1){grid-column:1/-1;border-radius:1.15rem}
+.luoi a.the.to  .khung,html:not([data-js]) .luoi a.the:nth-child(5n+1)  .khung{aspect-ratio:4/5}
+.luoi a.the.to  .mo,html:not([data-js]) .luoi a.the:nth-child(5n+1)  .mo{padding:3rem .9rem .95rem}
+.luoi a.the.to  b,html:not([data-js]) .luoi a.the:nth-child(5n+1)  b{font-size:.78rem;letter-spacing:.13em}
+/* Nhóm chỉ có ĐÚNG 5n+2 ô thì ô cuối đứng lẻ một mình nửa hàng — cho nó tràn
+   ngang luôn, hàng cụt trông như thiếu ảnh. */
+.luoi a.the.to:last-child{grid-column:1/-1}
+
+@media(min-width:44rem){
+main{max-width:52rem}
+header{padding-top:2.6rem}
+header.bia{height:40vh;max-height:20rem;padding-top:0}
+.logo{width:4.6rem;height:4.6rem}
+h1{font-size:2.5rem}
+.luoi{grid-template-columns:repeat(3,1fr);grid-auto-flow:dense}
+/* Ô lớn chiếm 2 cột × HAI HÀNG. Chỉ span 2 cột thì ô bên cạnh thấp hơn hẳn và
+   chừa một khoảng trống ngay cạnh ảnh to — `dense` không lấp được, vì chiều cao
+   hàng do ô cao nhất quyết. Span luôn 2 hàng thì cột thứ ba xếp vừa hai ô, ba
+   ô khớp mép nhau. Ảnh phải bỏ `aspect-ratio` và kéo `height:100%`, nếu không
+   nó giữ khung 3:4 rồi để hở đáy ô. */
+.luoi a.the.to,html:not([data-js]) .luoi a.the:nth-child(5n+1){grid-column:span 2;grid-row:span 2}
+/* Ép về 3:4 — luật 4/5 của bản điện thoại vẫn áp ở đây nếu không ghi đè, và
+   4/5 thì ô lớn thấp hơn hai hàng, hở 43px ở đáy (đo thật). */
+.luoi a.the.to  .khung,html:not([data-js]) .luoi a.the:nth-child(5n+1)  .khung{aspect-ratio:3/4}
+/* Ô lớn GIỮ NGUYÊN khung 3:4 như ô thường — đừng đụng vào `aspect-ratio`.
+   Rộng 2 cột + cao 2 hàng ở khung 3:4 là vừa khít, vì 2 hàng cộng một khe đúng
+   bằng chiều cao của khung đó.
+   Đã thử `aspect-ratio:auto;height:100%` và hỏng: ảnh gốc là 9:16 nên ô lớn cao
+   vống lên rồi KÉO CẢ HÀNG LƯỚI giãn theo — đo thật, hàng 475px trong khi ảnh ô
+   thường chỉ 355px, hở 120px dưới mỗi ô bên cạnh. */
+}
+@keyframes chay2{0.000%{transform:translate3d(-0.0000%,0,0)}36.000%{transform:translate3d(-0.0000%,0,0)}50.000%{transform:translate3d(-33.3333%,0,0)}86.000%{transform:translate3d(-33.3333%,0,0)}100%{transform:translate3d(-66.6667%,0,0)}}@keyframes chay3{0.000%{transform:translate3d(-0.0000%,0,0)}19.333%{transform:translate3d(-0.0000%,0,0)}33.333%{transform:translate3d(-25.0000%,0,0)}52.667%{transform:translate3d(-25.0000%,0,0)}66.667%{transform:translate3d(-50.0000%,0,0)}86.000%{transform:translate3d(-50.0000%,0,0)}100%{transform:translate3d(-75.0000%,0,0)}}@keyframes chay4{0.000%{transform:translate3d(-0.0000%,0,0)}11.000%{transform:translate3d(-0.0000%,0,0)}25.000%{transform:translate3d(-20.0000%,0,0)}36.000%{transform:translate3d(-20.0000%,0,0)}50.000%{transform:translate3d(-40.0000%,0,0)}61.000%{transform:translate3d(-40.0000%,0,0)}75.000%{transform:translate3d(-60.0000%,0,0)}86.000%{transform:translate3d(-60.0000%,0,0)}100%{transform:translate3d(-80.0000%,0,0)}}@keyframes chay5{0.000%{transform:translate3d(-0.0000%,0,0)}6.000%{transform:translate3d(-0.0000%,0,0)}20.000%{transform:translate3d(-16.6667%,0,0)}26.000%{transform:translate3d(-16.6667%,0,0)}40.000%{transform:translate3d(-33.3333%,0,0)}46.000%{transform:translate3d(-33.3333%,0,0)}60.000%{transform:translate3d(-50.0000%,0,0)}66.000%{transform:translate3d(-50.0000%,0,0)}80.000%{transform:translate3d(-66.6667%,0,0)}86.000%{transform:translate3d(-66.6667%,0,0)}100%{transform:translate3d(-83.3333%,0,0)}}</style></head><body><main><header class="bia"><img class="nen" src="anh/27-0-c38fdae3.webp" alt="" fetchpriority="high"><div class="phu"></div><div class="tren"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="45" cy="17" rx="8.5" ry="4.2" transform="rotate(-38 45 17)" fill="var(--la)"/><path d="M40 21c3-3 7-4 10-4" stroke="var(--la-dam)" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="31" cy="37" rx="19.5" ry="14.5" transform="rotate(-28 31 37)" fill="var(--nhan)"/><circle cx="48.2" cy="27.8" r="2.6" fill="var(--nhan)"/><circle cx="13.8" cy="46.2" r="2.6" fill="var(--nhan)"/><ellipse cx="26" cy="30" rx="7" ry="3" transform="rotate(-28 26 30)" fill="var(--sang)"/></svg><h1 class="co-chan">Chanh Có Gu</h1><p>Chanh tuy chua nhưng gu thì không chua</p></div></header><div class="tim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg><input id="q" type="search" autocomplete="off" placeholder="Tìm trong 5 món…" aria-label="Tìm sản phẩm"></div><section class="nhom" data-m="0"><h2><span class="co-chan">Thu Đông</span><i></i><em data-n>5</em></h2><div class="luoi"><a class="the" href="https://s.shopee.vn/1LfE1SpH77" target="_blank" rel="noopener nofollow" data-t="outfit 7 áo len cardigan cúc to chất dày qc3539 nabi cardigan outfit 7 ao len cardigan cuc to chat day qc3539 nabi cardigan"><span class="khung"><span class="day" style="width:600%;animation:chay5 21.0s infinite"><img src="anh/27-0-c38fdae3.webp" alt="" fetchpriority="high" width="600" height="800"><img src="anh/27-1-0db086b0.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/27-2-d35de351.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/27-3-628eec9d.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/27-4-9409f50e.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/27-0-c38fdae3.webp" alt="" loading="lazy" width="600" height="800"></span></span><div class="mo"><b>Outfit 7</b></div></a><a class="the" href="https://s.shopee.vn/AKa2jn0P2m" target="_blank" rel="noopener nofollow" data-t="outfit 3 áo len cardigan cổ bẻ cao đan gân khóa kéo xẻ màu trơn dệt kim lông thỏ dày dặn giữ ấm nữ form suông vừa hottrend style basic cadigan chất liệu lông thỏ mềm mại outfit 3 ao len cardigan co be cao dan gan khoa keo xe mau tron det kim long tho day dan giu am nu form suong vua hottrend style basic cadigan chat lieu long tho mem mai"><span class="khung"><span class="day" style="width:500%;animation:chay4 16.8s infinite"><img src="anh/20-0-4d31db31.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/20-1-0537ab0c.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/20-2-0f9d68dd.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/20-3-fbb9406d.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/20-0-4d31db31.webp" alt="" loading="lazy" width="600" height="800"></span></span><div class="mo"><b>Outfit 3</b></div></a><a class="the" href="https://s.shopee.vn/2qU1nycDdz" target="_blank" rel="noopener nofollow" data-t="outfit 2 áo len đỏ giáng sinh áo len dệt kim sọc đỏ mùa thu đông phiên bản hàn quốc dành cho nữ outfit 2 ao len do giang sinh ao len det kim soc do mua thu dong phien ban han quoc danh cho nu"><span class="khung"><span class="day" style="width:500%;animation:chay4 16.8s infinite"><img src="anh/19-0-00244ad5.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/19-1-7f44112e.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/19-2-c45bce09.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/19-3-6bf82ca2.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/19-0-00244ad5.webp" alt="" loading="lazy" width="600" height="800"></span></span><div class="mo"><b>Outfit 2</b></div></a><a class="the" href="https://s.shopee.vn/1VyeDKyn6p" target="_blank" rel="noopener nofollow" data-t="outfit 1 chân váy ren thô boil dáng dài qc có lót trong cv836 outfit 1 chan vay ren tho boil dang dai qc co lot trong cv836"><span class="khung"><span class="day" style="width:600%;animation:chay5 21.0s infinite"><img src="anh/18-0-29478448.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/18-1-64f5d69f.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/18-2-d1f65da8.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/18-3-59f82b52.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/18-4-29478448.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/18-0-29478448.webp" alt="" loading="lazy" width="600" height="800"></span></span><div class="mo"><b>Outfit 1</b></div></a><a class="the" href="https://s.shopee.vn/80C7xbxFLp" target="_blank" rel="noopener nofollow" data-t="outfit 5 outfit 5 - áo khoác dạ bố cổ trụ dáng bom tay chuông bomie jacket outfit 5 outfit 5 - ao khoac da bo co tru dang bom tay chuong bomie jacket"><span class="khung"><span class="day" style="width:500%;animation:chay4 16.8s infinite"><img src="anh/13-0-7c8a29f4.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/13-1-c8dfa46e.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/13-2-71c4f40a.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/13-3-c2ffcb58.webp" alt="" loading="lazy" width="600" height="800"><img src="anh/13-0-7c8a29f4.webp" alt="" loading="lazy" width="600" height="800"></span></span><div class="mo"><b>Outfit 5</b></div></a></div></section><p class="rong" id="rong" hidden>Không có món nào khớp.</p><script>(function(){var R=document.documentElement;R.setAttribute('data-js','');var G=[].slice.call(document.querySelectorAll('.luoi'));var A=[].slice.call(document.querySelectorAll('a.the'));if(!A.length)return;function dat(){G.forEach(function(g){var i=0;[].forEach.call(g.children,function(el){if(el.hidden){el.classList.remove('to');return}el.classList.toggle('to',i%5===0);i++})})}dat();var q=document.getElementById('q'),r=document.getElementById('rong'),N=[].slice.call(document.querySelectorAll('.nhom'));function kd(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\u0111/g,'d').toLowerCase()}if(q){q.addEventListener('input',function(){var v=kd(q.value.trim()),t=0;N.forEach(function(nh){var n=0;[].forEach.call(nh.querySelectorAll('a.the'),function(el){var ok=!v||el.dataset.t.indexOf(v)>=0;el.hidden=!ok;if(ok)n++});nh.hidden=n===0;var d=nh.querySelector('[data-n]');if(d)d.textContent=n;t+=n});if(r)r.hidden=t>0;dat()})}if(!window.IntersectionObserver)return;var tl=new WeakMap(),cur=null;function d(el,on){var x=el.querySelector('.day');if(x)x.style.animationPlayState=on?'running':'paused'}A.forEach(function(el){d(el,false);tl.set(el,0)});function chon(){var b=null,bv=0;A.forEach(function(el){if(el.hidden)return;var v=tl.get(el)||0;if(v>bv){bv=v;b=el}});if(b===cur)return;if(cur)d(cur,false);cur=b;if(b)d(b,true)}var io=new IntersectionObserver(function(es){es.forEach(function(e){tl.set(e.target,e.intersectionRatio)});chon()},{threshold:[0,.25,.5,.75,1]});A.forEach(function(el){io.observe(el)})})();</script></main></body></html>
