@@ -58,10 +58,10 @@ margin-bottom:1.05rem;isolation:isolate}
    xuống đáy hàng 666px — tức nằm ngoài vùng nhìn thấy, mất sạch logo, tên và
    câu giới thiệu mà nhìn trang chỉ thấy một tấm ảnh. Đo thật. */
 header.bia{display:grid;grid-template-rows:minmax(0,1fr);padding:0;margin-bottom:.9rem;
-height:44vh;min-height:13rem;max-height:22rem;
+height:65vh;min-height:22rem;max-height:42rem;
 border-radius:0 0 1.75rem 1.75rem;overflow:hidden}
 header.bia>*{grid-area:1/1}
-header.bia .nen{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+header.bia .nen{width:100%;height:100%;object-fit:contain;object-position:50% 50%}
 /* Lớp phủ: tối ở đáy để chữ đọc được, và ĐÁY TAN HẲN vào màu nền trang nên
    không thấy đường cắt giữa bìa và lưới. */
 /* Dải tối phải còn ĐẶC ở chỗ chữ đứng, rồi mới tan vào nền ở 12% cuối.
